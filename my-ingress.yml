@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-nginx-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - host: labs.play-with-k8s.com
+      http:
+        paths:
+          - path: /my-nginx
+            pathType: Prefix
+            backend:
+              service:
+                name: my-nginx-service
+                port:
+                  number: 80
