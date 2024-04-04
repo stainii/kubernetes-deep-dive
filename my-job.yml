@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
         - name: curl-container
-          image: alpine
+          image: curlimages/curl
           command: ["/bin/sh"]
           args: ["-c", "echo $(curl http://my-nginx-service/)"]
       restartPolicy: Never

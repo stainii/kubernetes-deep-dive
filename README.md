@@ -79,6 +79,30 @@ We will prove this in the next step, with a Job.
 > There is a better way, however: Ingress/Routes.
 
 
+## (Cron)Jobs: I want to run a task until it stops
+
+`cat my-job.yml`
+
+* apiVersion: batch/v1: Specifies the API version for a Job resource.
+* kind: Job: Indicates that this is a Job resource.
+* metadata: Metadata about the Job, such as its name.
+* spec: The specification of the Job. It contains:
+  * template: The template for the Pod that the Job will create.
+    * spec: The specification of the Pod's containers.
+    * containers: A list of containers to run in the Pod.
+      * name: The name of the container.
+      * image: The Docker image for the container. alpine is used here because it's lightweight and includes curl.
+      * command and args: The command and arguments to run in the container. Here, it uses sh to run a curl command that prints the result of fetching http://my-nginx-service/.
+    * restartPolicy: Never: Ensures that the Pod does not restart. Jobs complete when their Pods exit.
+  * backoffLimit: Specifies the number of retries before considering the Job as failed. 4 is a reasonable default.
+
+
+`kubectl apply -f my-job.yml`
+
+`kubectl get jobs` 
+
+`kubectl logs -f jobs/curl-job`
+
 ### Ingress/Routes: I want to reach my service from a hostname instead of an IP (5 min)
 TODO: create ingress en surf ernaar met localhost?
 
