@@ -30,7 +30,7 @@ That's what a deployment is for. A deployment (and combined replicaset) make sur
 `kubectl get deployments`  
 No deployments
 
-`kubectl apply -f my-deployment.yaml`
+`kubectl apply -f my-deployment.yml`
 
 `kubectl get deployments`
 
@@ -43,15 +43,41 @@ You should see that a new one will be created, since the deployment will keep it
 `kubectl get services`  
 A default service is available (for running Kubernetes itself), we'll create another one for our Nginx.
 
-`cat `
-TODO: services matchen op label
+`cat my-service.yml`
+Let op de selector: 
+```yaml
+spec:
+  selector:
+    app: nginx
+```
 
-TODO: create service
-TODO: curl vanuit pod naar service
+Deze service gaat **op zoek naar deployments** met een **label** dat overeenkomt met `app: nginx`.
 
-Within the cluster (within the pods), you can reach the service (and the underlying deployments -> pods) with the service name (http://my-service-name).
+`kubectl get deployment my-nginx-deployment -o yaml`
 
-When you set the type of the service to "NodePort", the service gets a reacheable ip on the node. There is a better way, however: Ingress.
+```yaml
+labels:
+    app: nginx
+```
+
+`kubectl apply -f my-service.yml`
+
+`kubectl get services`
+
+```
+NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+kubernetes         ClusterIP   10.96.0.1       <none>        443/TCP   9m19s
+my-nginx-service   ClusterIP   10.109.82.233   <none>        80/TCP    4s
+```
+
+
+Within the cluster (within the pods), you can reach the service (and the underlying deployments -> pods) with the service name (http://my-service-name).  
+We will prove this in the next step, with a Job.
+
+> [!INFO]
+> When you set the type of the service to "NodePort", the service gets a reachable (external) ip on the node.
+> There is a better way, however: Ingress/Routes.
+
 
 ### Ingress/Routes: I want to reach my service from a hostname instead of an IP (5 min)
 TODO: create ingress en surf ernaar met localhost?
@@ -71,8 +97,6 @@ TODO: create and mount config map/secret
 > In VDAB, we don't define the values of the secrets in Openshift, but in a Vault. Openshift will download these values and mount them.
 
 
-## (Cron)Jobs: I want to run a task until it stops
-TODO
 
 ## Openshift vs Kubernetes (5 min)
 **Kubernetes** is a powerful, flexible foundation for container orchestration, suited for organizations that need customization and have the expertise to manage its complexity.
