@@ -9,6 +9,6 @@ spec:
         - name: my-container
           image: curlimages/curl
           command: ["/bin/sh"]
-          args: ["-c", "curl http://my-nginx-service:9376"]
+          args: ["-c", "curl http://my-nginx-service"]
       restartPolicy: Never
   backoffLimit: 4
