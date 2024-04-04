@@ -101,7 +101,7 @@ We will prove this in the next step, with a Job.
 
 `kubectl get jobs` 
 
-`kubectl logs -f jobs/curl-job`
+`kubectl logs -f jobs/my-job`
 
 ### Ingress/Routes: I want to reach my service from a hostname instead of an IP (5 min)
 TODO: create ingress en surf ernaar met localhost?
