@@ -22,4 +22,5 @@ spec:
           volumes:
             - ./nginx-templates:/etc/nginx/templates
           env:
-            - YOUR_NAME: world
+            - name: YOUR_NAME
+              value: world
