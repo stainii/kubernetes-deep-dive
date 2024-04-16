@@ -20,7 +20,12 @@ spec:
           ports:
             - containerPort: 80
           volumes:
-            - ./nginx-templates:/etc/nginx/templates
+            - name: nginx-templates
+              volumePath: /etc/nginx/templates
           env:
             - name: YOUR_NAME
               value: world
+      volumes:
+        - name: nginx-templates
+          hostPath:
+            path: ./nginx-templates
