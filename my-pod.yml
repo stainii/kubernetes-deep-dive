@@ -8,3 +8,9 @@ spec:
       image: nginx:1.14.2
       ports:
         - containerPort: 80
+      volumeMounts:
+        - name: nginx-templates
+          mountPath: /etc/nginx/templates
+      env:
+        - name: MY_NAME
+          value: world
