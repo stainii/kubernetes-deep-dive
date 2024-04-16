@@ -28,4 +28,4 @@ spec:
       volumes:
         - name: nginx-templates
           hostPath:
-            path: ./nginx-templates
+            path: /root/kubernetes-deep-dive/nginx-templates
