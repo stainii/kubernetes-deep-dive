@@ -103,11 +103,36 @@ We will prove this in the next step, with a Job.
 
 `kubectl logs -f jobs/my-job`
 
-### Ingress/Routes: I want to reach my service from a hostname instead of an IP (5 min)
-TODO: create ingress en surf ernaar met localhost?
+### Ingress/Routes: I want to reach my service from a hostname instead of an IP (2 min)
+Ingress is a type of object that binds services to hostnames. It can additionality do url rewriting, header modification, ssl/tls termination, ...
 
-> [!NOTE]
-> Configmaps and secrets can also be mounted in different ways. For example: you can mount the yaml as a file on your container.
+In Openshift, a more specialized type has been added that replaces Ingress functionality: Routes.
+
+Example of an Openshift route:
+```yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: my-nginx-route
+spec:
+  host: my-nginx.mydomain.com
+  to:
+    kind: Service
+    name: my-nginx-service
+  port:
+    targetPort: 80
+  tls:
+    termination: edge
+    certificate: |-
+      -----BEGIN CERTIFICATE-----
+      MIIDYDCCAkigAwIBAgIJAJC1HiIAZAiIMA0GCSqGSIb3DQEBCwUAMCQxIjAgBgNV
+      ... (certificate content)
+      -----END CERTIFICATE-----
+    key: |-
+      -----BEGIN PRIVATE KEY-----
+      MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDv... (key content)
+      -----END PRIVATE KEY-----
+```
 
 
 ### Config maps and secrets: I want to pass configuration properties as environment variables (5 min)
@@ -120,8 +145,6 @@ TODO: create and mount config map/secret
 > [!NOTE]
 > In VDAB, we don't define the values of the secrets in Openshift, but in a Vault. Openshift will download these values and mount them.
 
-
-
 ## Openshift vs Kubernetes (5 min)
 **Kubernetes** is a powerful, flexible foundation for container orchestration, suited for organizations that need customization and have the expertise to manage its complexity.
 
@@ -132,7 +155,7 @@ OpenShift includes additional components out of the box, such as a user-friendly
 In practice: replace all "kubectl" commands with "oc". Also, we don't use Ingress, we use routes (which is very similar).
 
 ## Helm (15 min)
-TODO: simpele package maken zonder templating
+TODO: simpele package installeren zonder templating
 TODO: nu met templating
 TODO: tonen in echt project
 
