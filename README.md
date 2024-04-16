@@ -135,9 +135,29 @@ spec:
 ```
 
 
-### Config maps and secrets: I want to pass configuration properties as environment variables (5 min)
-TODO: add env vars to deployment
-TODO: create and mount config map/secret
+### Config maps and secrets: I want to pass configuration properties as environment variables (8 min)
+#### Config maps
+If you `cat my-deployment.yml`, you can see that an env variable has been defined. We can extract this config into a separate "config map". 
+
+`cat my-config-map.yml`  
+`cat my-deployment-mounting-from-config-map.yml`
+
+`kubectl apply -f my-config-map.yml`  
+`kubectl apply -f my-deployment-mounting-from-config-map.yml`
+
+`kubectl delete job my-job`  
+`kubectl apply -f my-job.yml`  
+`kubectl logs -f jobs/my-job`
+
+#### Secrets
+If the configuration should be kept secret (like passwords), then you should use a Secret instead.
+
+In a default Kubernetes, Secrets are the same as ConfigMaps, with the sole difference that the values have been base64-encoded. This is not so safe, of course.
+
+`cat my-secret.yml`  
+`cat my-deployment-mounting-from-secret.yml`
+
+You can add an extension so that secrets are encrypted properly. Also, you can externalize the secrets into a vault, and let Kubernetes download them. 
 
 > [!NOTE]
 > Configmaps and secrets can also be mounted in different ways. For example: you can mount the yaml as a file on your container.
