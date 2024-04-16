@@ -23,7 +23,7 @@ spec:
             - name: nginx-templates
               mountPath: /etc/nginx/templates
           env:
-            - name: YOUR_NAME
+            - name: MY_NAME
               value: world
       volumes:
         - name: nginx-templates
