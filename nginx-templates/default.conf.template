@@ -1,6 +1,6 @@
 server {
     listen 80;
-    server_name example.com;
+    server_name *;
 
     location / {
         add_header Content-Type text/plain;
