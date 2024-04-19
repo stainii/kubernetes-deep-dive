@@ -14,3 +14,7 @@ spec:
       env:
         - name: MY_NAME
           value: world
+  volumes:
+    - name: nginx-templates
+      hostPath:
+        path: /root/kubernetes-deep-dive/nginx-templates
