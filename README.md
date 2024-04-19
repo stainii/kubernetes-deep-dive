@@ -5,6 +5,9 @@ This deep dive will be limited to what VDAB currently uses.
 
 ## Init test environment (5 min)
 * Go to https://labs.play-with-k8s.com/. Log in with a Github or Dockerhub account.
+* Click on "start"
+* Click on "+ add new instance". You should get a shell.
+* **In that shell, execute all the following commands.**
 * Clone this repo: `git clone https://github.com/stainii/kubernetes-deep-dive`
 * Initialize the environment by running `cd kubernetes-deep-dive` and `./init.sh`
 
