@@ -206,8 +206,8 @@ Let's clean up everything we've created manually.
 `kubectl delete all --all`
 
 Now, install the package
-`helm install my-nginx .` 
-`kubectl get all`
+`helm install my-nginx .`   
+`kubectl get all`  
 `kubectl logs -f jobs/my-job`
 
 It should all work, installed with only one command. Now imagine pushing this to a repo, sharing with colleagues, ...
