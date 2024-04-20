@@ -235,6 +235,8 @@ Helm charts can depend on other Helm charts. You can create "library charts" whi
 
 Within VDAB, we take this to the extreme. We don't define any Kubernetes file. We extend from a chain of Helm charts, which provide the Kubernetes files and a lot of functions. In our Helm chart, we only need to use the dependency and define our values in `values.yaml`.
 
+Want to see what your dependencies contain? They are located in the `charts` folder!
+
 ## ArgoCD (5 min)
 ### Git as a Source of Truth
 Argo CD uses Git repositories to store the desired state of applications and their environments. It supports various configuration management tools and formats, including Helm, Kustomize, Jsonnet, and plain YAML files.
