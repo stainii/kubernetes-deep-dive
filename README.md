@@ -77,7 +77,7 @@ my-nginx-service   ClusterIP   10.109.82.233   <none>        80/TCP    4s
 Within the cluster (within the pods), you can reach the service (and the underlying deployments -> pods) with the service name (http://my-service-name).  
 We will prove this in the next step, with a Job.
 
-> [!INFO]
+> [!NOTE]
 > When you set the type of the service to "NodePort", the service gets a reachable (external) ip on the node.
 > There is a better way, however: Ingress/Routes.
 
