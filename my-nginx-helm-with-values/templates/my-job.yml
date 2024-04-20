@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: my-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: my-container
+          image: curlimages/curl
+          command: ["/bin/sh"]
+          args: ["-c", "curl http://my-nginx-service"]
+      restartPolicy: Never
+  backoffLimit: 4

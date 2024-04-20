@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-nginx-pod
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.14.2
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - name: nginx-templates
+          mountPath: /etc/nginx/templates
+      env:
+        - name: MY_NAME
+          value: world
+  volumes:
+    - name: nginx-templates
+      hostPath:
+        path: /root/kubernetes-deep-dive/nginx-templates
