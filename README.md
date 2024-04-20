@@ -178,9 +178,62 @@ OpenShift includes additional components out of the box, such as a user-friendly
 In practice: replace all "kubectl" commands with "oc". Also, we don't use Ingress, we use routes (which is very similar).
 
 ## Helm (15 min)
-TODO: simpele package installeren zonder templating
-TODO: nu met templating
-TODO: tonen in echt project
+Helm is a **packaging** tool for Kubernetes objects.
+It lets you
+
+* bundle Kubernetes configuration files in a tar
+* install/uninstall/upgrade the complete package with one command
+* allow customisation via a templating engine
+
+### Simplest example
+
+`cd my-nginx-helm-without-values`
+
+`ll`
+
+You see:
+* a Chart.yaml file
+* a templates folder
+
+`cat Chart.yaml`  
+This describes the package that you want to install/distribute.
+In its most basic form, this is no more than a name, type and version. 
+
+`ll templates`  
+These files should look familiar! They are an exact copy of the Kubernetes files we've toyed with before.
+
+Let's clean up everything we've created manually.
+`kubectl delete all --all`
+
+Now, install the package
+`helm install my-nginx .` 
+`kubectl get all`
+`kubectl logs -f jobs/my-job`
+
+It should all work, installed with only one command. Now imagine pushing this to a repo, sharing with colleagues, ...
+
+Let's clean up before going to the next part.  
+`helm uninstall my-nginx`  
+`kubectl get all`
+
+### Templating engine
+
+`cd ../my-nginx-helm-with-values`
+
+Imagine you pull a Helm chart from an internet repo. You probably want to have some configuration options!
+
+In the templates folder, you can define "variables" via a Go template syntax. A very simple example: 
+`cat templates/my-config-map.yml`
+
+The deployer can define the values for these variables in `values.yaml`.  
+`cat values.yaml`
+
+`helm install my-nginx .`
+
+### Libraries, functions, sharing Kubernetes files, ... The sky is the limit.
+Helm charts can depend on other Helm charts. You can create "library charts" which only contain functions, variables, ... which helps you customize your own Helm Chart. You can also share Kubernetes files with downstream Helm charts.
+
+Within VDAB, we take this to the extreme. We don't define any Kubernetes file. We extend from a chain of Helm charts, which provide the Kubernetes files and a lot of functions. In our Helm chart, we only need to use the dependency and define our values in `values.yaml`.
 
 ## ArgoCD (5 min)
 ### Git as a Source of Truth
@@ -188,6 +241,8 @@ Argo CD uses Git repositories to store the desired state of applications and the
 
 ### Continuous Deployment
 Whenever changes are pushed to a Git repository, Argo CD detects these changes and automatically deploys the new versions to the corresponding Kubernetes clusters, ensuring that the live state matches the desired state stored in Git.
+
+In VDAB, I think they pull our Helm charts from the Git repo, convert the Helm charts to Kubernetes files via `helm template .`
 
 ### Health Status Monitoring
 Argo CD continuously monitors the deployed applications and their resources, providing a visual representation of their health and status. This helps in identifying and resolving issues quickly.
