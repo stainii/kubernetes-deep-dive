@@ -16,15 +16,17 @@ This deep dive will be limited to what VDAB currently uses.
 `kubectl get pods`  
 No pods.
 
+`cat my-pod.yml`  
 `kubectl apply -f my-pod.yml`
 
-`kubectl get pods`  
+`kubectl get pods`
 The pod is there!
 
 `kubectl get pod my-nginx-pod -o yaml`  
 Look for `pod ip`. You can curl to this pod ip.
 
 Kill the pod with `kubectl delete pod/my-nginx-pod`.  
+`kubectl get pods`  
 Notice that there is no system in place to restart the pod automatically.
 
 ### Deployment: I want multiple instances of these pods, and they need to restart when they crash (5 min)
@@ -33,13 +35,15 @@ That's what a deployment is for. A deployment (and combined replicaset) make sur
 `kubectl get deployments`  
 No deployments
 
+`cat my-deployment.yml`  
 `kubectl apply -f my-deployment.yml`
 
 `kubectl get deployments`
 
 `kubectl get pods`
 
-Kill one of the pods with `kubectl delete pod [podName]`.  
+Kill one of the pods with `kubectl delete pod [podName]`.   
+`kubectl get pods`  
 You should see that a new one will be created, since the deployment will keep it in that state.
 
 ### Services: I want to reach my pods on one address (5 min)
@@ -202,19 +206,23 @@ In its most basic form, this is no more than a name, type and version.
 `ll templates`  
 These files should look familiar! They are an exact copy of the Kubernetes files we've toyed with before.
 
-Let's clean up everything we've created manually.
-`kubectl delete all --all`
+Let's clean up everything we've created manually.  
+`kubectl delete all --all`  
+`kubectl delete cm --all`  
+`kubectl delete secret --all`  
 
-Now, install the package
+Now, install the package.  
 `helm install my-nginx .`   
 `kubectl get all`  
+`kubectl get cm`  
 `kubectl logs -f jobs/my-job`
 
 It should all work, installed with only one command. Now imagine pushing this to a repo, sharing with colleagues, ...
 
 Let's clean up before going to the next part.  
 `helm uninstall my-nginx`  
-`kubectl get all`
+`kubectl get all`  
+`kubectl get cm`  
 
 ### Templating engine
 
@@ -225,12 +233,17 @@ Imagine you pull a Helm chart from an internet repo. You probably want to have s
 In the templates folder, you can define "variables" via a Go template syntax. A very simple example: 
 `cat templates/my-config-map.yml`
 
+```yaml
+  MY_NAME: {{ .Values.my_custom_name }}
+```
+
 The deployer can define the values for these variables in `values.yaml`.  
 `cat values.yaml`
 
-`helm install my-nginx .`
+`helm install my-nginx .`  
+`kubectl logs -f jobs/my-job`
 
-### Libraries, functions, sharing Kubernetes files, ... The sky is the limit.
+### Dependencies: libraries, functions, sharing Kubernetes files, ... The sky is the limit.
 Helm charts can depend on other Helm charts. You can create "library charts" which only contain functions, variables, ... which helps you customize your own Helm Chart. You can also share Kubernetes files with downstream Helm charts.
 
 Within VDAB, we take this to the extreme. We don't define any Kubernetes file. We extend from a chain of Helm charts, which provide the Kubernetes files and a lot of functions. In our Helm chart, we only need to use the dependency and define our values in `values.yaml`.
